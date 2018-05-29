@@ -1,46 +1,13 @@
 #!/bin/bash
 #######################
-#Script created by 19alexrus71
-#For donate - LTC: LaeSwaV5mnXJb6DgccCdHiZNKUCvbfDMFT
+#Script created by lexandr0s
+#For donate:
+# LTC: LaeSwaV5mnXJb6DgccCdHiZNKUCvbfDMFT
+# ETH: 0x4e2cE16142600DE62E41b107BA06701c80C82fc4
 #############################################################
 
-#Стартовые обороты кулеров
-start_speed=60
-
-#Температура при достижении которой обороты начинают плавно повышаться
-high_level=60
-
-#Температура при которой обороты начинают плавно понижаться
-low_level=58
-
-#Температура при которой обороты сразу повышаются до very_high_fan
-very_high_level=62
-
-#Скорость кулера при достижении very_high_level
-very_high_fan=70
-
-#Скорость кулера ниже которой обороты уже не регулируются и переключаются в авторежим
-min_fan=35
-
-#Максимальная скорость кулера
-max_fan=100
-
-#Пауза между циклами проверки в секундах
-PAUSE=10
-
-#Минимальный порог загрузки карт. Если меньше - считается, что майнинг не работает
-min_using=50
-
-#Количество циклов с ошибкой (или низкой загрузкой карт), при достижении которого происходит reboot
-error_level=15
-
-#Включение/выключение watchdog. Отключить: watch_dog=0. Мониторинг будет происходить, но перезагрузка отключена
-watch_dog=1
-
-
-
-#########################################################################
 export DISPLAY=:0
+source fan.conf
 
 busy=1
 while [ $busy -ne 0 ]
@@ -56,12 +23,21 @@ do
 	fi
 done
 
+
 error_flag=0
 error_count=0
 
 while (true)
 do
+source fan.conf
 clear
+
+echo $test1
+
+echo $test2
+
+
+
 
 if [ $error_flag -ne 0 ]
 then
@@ -98,10 +74,8 @@ else
 fi
 
 error_flag=0
-
 res_req=0
 busy=1
-
 while [ $busy -ne 0 ]
 do
 	busy=$(ps aux | grep [n]vidia-smi | wc -l )
@@ -123,9 +97,13 @@ do
 		sleep 1
 	fi
 done
+nv_string=""
+nv_string_control=""
+nv_string_speed=""
 
 for (( i=0; i < $count; i++ ))
 do
+	
 	fan=${all_fan[$i]}
 	temp=${all_temp[$i]}
 	using=${all_using[$i]}
@@ -163,9 +141,9 @@ do
 		echo "Fan "$i": "$fan" Temperature "$i": "$temp ". Is very high! Increase fan speed to "$speed
 		if [ $control -eq 0 ]
 		then
-			nvidia-settings -a "[gpu:"$i"]/GPUFanControlState=1" > /dev/null 2>&1
+			nv_string_control="$nv_string_control -a [gpu:$i]/GPUFanControlState=1"
 		fi
-		nvidia-settings -a "[fan:"$i"]/GPUTargetFanSpeed="$speed > /dev/null 2>&1
+			nv_string_speed="$nv_string_speed -a [fan:$i]/GPUTargetFanSpeed=$speed"
 		continue
 	fi
 
@@ -175,7 +153,7 @@ do
 		then
 			if [ $control -ne 0 ]
 			then
-				nvidia-settings -a "[gpu:"$i"]/GPUFanControlState=0" > /dev/null 2>&1
+				nv_string_control="$nv_string_control -a [gpu:$i]/GPUFanControlState=0"
 			fi
 			echo "Fan "$i": "$fan" Temperature "$i": "$temp
 			continue
@@ -183,7 +161,7 @@ do
 			if [ $control -ne 0 ]
 			then
 				speed=$(( $fan - 1 ))
-				nvidia-settings -a "[fan:"$i"]/GPUTargetFanSpeed="$speed > /dev/null 2>&1
+				nv_string_speed="$nv_string_speed -a [fan:$i]/GPUTargetFanSpeed=$speed"
 				echo "Fan "$i": "$fan" Temperature "$i": "$temp ". Is very low! Decrease fan speed to "$speed
 				continue
 			fi
@@ -193,6 +171,12 @@ do
 	echo "Fan "$i": "$fan" Temperature "$i": "$temp
 
 done
+
+nv_string="$nv_string_control $nv_string_speed"
+if [ ${#nv_string} -gt 1 ]
+then
+	nvidia-settings $nv_string > /dev/null 2>&1
+fi	
 
 sleep $PAUSE
 done
