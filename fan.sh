@@ -7,7 +7,7 @@
 #############################################################
 
 export DISPLAY=:0
-source fan.conf
+source /home/user/fan.conf
 
 busy=1
 while [ $busy -ne 0 ]
@@ -29,8 +29,11 @@ error_count=0
 
 while (true)
 do
-source fan.conf
+source /home/user/fan.conf
 clear
+
+
+
 
 
 if [ $error_flag -ne 0 ]
