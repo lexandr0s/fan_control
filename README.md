@@ -15,37 +15,38 @@
 ## Использование в HiveOS
 - скачать архив в домашнюю директорию /home/user
 
-*cd /home/user*
+> cd /home/user
 
-*wget https://github.com/lexandr0s/fan_control/archive/v2.0.tar.gz
+> wget https://github.com/lexandr0s/fan_control/archive/v2.0.tar.gz
 
 - распаковать архив
 
-*tar -xvf v2.0.tar.gz*
+> tar -xvf v2.0.tar.gz
 
 - присвоить скриптам права на исполнение
 
-*chmod +x fan_control-2.0/**
+> chmod +x fan_control-2.0/*
 
 -скопировать скрипт управления вентиляторами и скрипт автозапуска и скрипт в домашнуюю директорию
 
-*cp fan_control-2.0/* /home/user*
+> cp fan_control-2.0/* /home/user
 
 -перезагрузить риг или запустить скрипт без перезагрузки выполнив команду:
 
-*screen -dmS fan /home/user/fan.sh*
+> screen -dmS fan /home/user/fan.sh
 
 
 После этого скрипт будет запускаться при старте рига в фоновом режиме в screen.
 
 Восстановить окно скрипта и понаблюдать за его работой можно с помощью команды
 
-*screen -r fan*
+> screen -r fan
 
 Отключиться от окна скрипта:
 
-*Ctrl+A
-*D
+> Ctrl+A
+
+> D
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
