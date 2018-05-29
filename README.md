@@ -21,20 +21,21 @@
 
 > cd /home/user
 
-> wget https://github.com/lexandr0s/fan_control/archive/v2.0.tar.gz
+> wget https://github.com/lexandr0s/fan_control/archive/v2.1.tar.gz
 
 - распаковать архив
 
-> tar -xvf v2.0.tar.gz
+> tar -xvf v2.1.tar.gz
 
 - присвоить скриптам права на исполнение
 
-> chmod +x fan_control-2.0/*
+> chmod +x fan_control-2.1/*
 
 - скопировать скрипт управления вентиляторами и скрипт автозапуска и скрипт в домашнуюю директорию
 
-> cp fan_control-2.0/* /home/user
+> cp fan_control-2.1/* /home/user
 
+- при неообходимости отредактировать файл конфигурации fan.conf
 - перезагрузить риг или запустить скрипт без перезагрузки выполнив команду:
 
 > screen -dmS fan /home/user/fan.sh
