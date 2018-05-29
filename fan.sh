@@ -32,12 +32,6 @@ do
 source fan.conf
 clear
 
-echo $test1
-
-echo $test2
-
-
-
 
 if [ $error_flag -ne 0 ]
 then
