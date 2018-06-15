@@ -9,19 +9,9 @@
 export DISPLAY=:0
 source /home/user/fan.conf
 
-busy=1
-while [ $busy -ne 0 ]
-do
-	busy=$(ps aux | grep [n]vidia-smi | wc -l )
-	if [ $busy -eq 0 ]
-	then
-		count=$(sudo nvidia-smi -i 0 --query-gpu=count --format=csv,noheader,nounits)
-		nvidia-settings -a "GPUFanControlState=1" > /dev/null 2>&1
-		nvidia-settings -a "GPUTargetFanSpeed="$start_speed > /dev/null 2>&1
-	else
-		sleep 1
-	fi
-done
+count=$(sudo nvidia-smi -i 0 --query-gpu=count --format=csv,noheader,nounits)
+nvidia-settings -a "GPUFanControlState=1" > /dev/null 2>&1
+nvidia-settings -a "GPUTargetFanSpeed="$start_speed > /dev/null 2>&1
 
 
 error_flag=0
