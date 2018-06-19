@@ -62,28 +62,20 @@ fi
 
 error_flag=0
 res_req=0
-busy=1
-while [ $busy -ne 0 ]
-do
-	busy=$(ps aux | grep [n]vidia-smi | wc -l )
-	if [ $busy -eq 0 ]
-	then
-		all_fan=($(echo "$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits)" | tr ' ' '\n'))
-		res_req=$?
-		if [ $res_req -ne 0 ]
-		then
-			echo "Error get data from cards"
-			error_flag=1
-			error_msg="Error get data from cards"
-			continue 2
-		fi
-		all_temp=($(echo "$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)" | tr ' ' '\n'))
-		all_using=($(echo "$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits)" | tr ' ' '\n'))
-		all_control=($(echo "$(nvidia-settings -q GPUFanControlState -t)" | tr ' ' '\n'))
-	else
-		sleep 1
-	fi
-done
+all_fan=($(echo "$(nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits)" | tr ' ' '\n'))
+res_req=$?
+if [ $res_req -ne 0 ]
+then
+	echo "Error get data from cards"
+	error_flag=1
+	error_msg="Error get data from cards"
+	continue
+fi
+
+all_temp=($(echo "$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)" | tr ' ' '\n'))
+all_using=($(echo "$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits)" | tr ' ' '\n'))
+all_control=($(echo "$(nvidia-settings -q GPUFanControlState -t)" | tr ' ' '\n'))
+
 nv_string=""
 nv_string_control=""
 nv_string_speed=""
