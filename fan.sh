@@ -7,7 +7,10 @@
 #############################################################
 
 export DISPLAY=:0
-source /home/user/fan.conf
+
+SCRIPT_PATH=`dirname $0`
+source $SCRIPT_PATH/fan.conf
+
 
 count=$(sudo nvidia-smi -i 0 --query-gpu=count --format=csv,noheader,nounits)
 nvidia-settings -a "GPUFanControlState=1" > /dev/null 2>&1
@@ -19,7 +22,8 @@ error_count=0
 
 while (true)
 do
-source /home/user/fan.conf
+sleep $PAUSE
+source $SCRIPT_PATH/fan.conf
 clear
 
 
@@ -157,5 +161,4 @@ then
 	nvidia-settings $nv_string > /dev/null 2>&1
 fi	
 
-sleep $PAUSE
 done
