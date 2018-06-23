@@ -21,7 +21,7 @@
 
 > cd /home/user
 
-> wget https://github.com/lexandr0s/fan_control/archive/v2.2.tar.gz
+> wget https://github.com/lexandr0s/fan_control/archive/v2.3.tar.gz
 
 - распаковать архив
 
